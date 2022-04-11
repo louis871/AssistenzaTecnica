@@ -1,0 +1,52 @@
+﻿@{
+    AssistenzaTecnica.Models.Richiesta.StatoRichiesta sr = Model;
+    if (sr.Id == 0)
+    {
+        ViewBag.Title = "Dettagli del nuovo stato relativo alla richiesta #" + sr.IdRichiesta;
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli dello stato #" + sr.Id + " relativo alla richiesta #" + sr.IdRichiesta;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaStatoRichiesta")" method="post">
+        <input type="hidden" name="id" value="@sr.Id" />
+        <input type="hidden" name="idRichiesta" value="@sr.IdRichiesta" />
+        <div class="input testo">
+            <label>Stato</label>
+            <select name="IdStato">
+                @foreach (AssistenzaTecnica.Models.Stato s in ViewBag.AllStati.Values)
+                {
+                    <option value="@s.Id" @(s.Id == sr.Stato.Id ? "selected" : "")>@s.Descrizione</option>
+                }
+            </select>
+        </div>
+        <div class="input testo">
+            <label>Utente</label>
+            <select name="IdUtente">
+                @foreach (AssistenzaTecnica.Models.Utente u in ViewBag.AllUtenti.Values)
+                {
+                    <option value="@u.Id" @(u.Id == sr.Utente.Id ? "selected" : "")>@u.Nome</option>
+                }
+            </select>
+        </div>
+        <div class="input testo">
+            <label>Data della richiesta</label>
+            <input type="datetime" name="DataAggiunta" value="@sr.DataAggiunta" />
+        </div>
+        <div class="input testo">
+            <label>Assegnazione</label>
+            <input type="text" name="Assegnazione" value="@sr.Assegnazione" />
+        </div>
+        <div class="input testo">
+            <label>Ore lavorate</label>
+            <input type="text" name="OreLavorate" value="@sr.OreLavorate.ToString("N2")" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-stato-richiesta" value="Salva le modifiche" />
+        </div>
+    </form>
+</div>

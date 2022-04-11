@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assitenza Tecnica</title>
+    <link href="~/Content/Site.css" rel="stylesheet">
+    <link href="~/assets/fontawesome/css/all.css" rel="stylesheet">
+    @Html.Partial("_Scripts")
+</head>
+<body>
+    <div>
+        <div class="sx-container">
+            <div class="site-title">
+                <h1>Assistenza Tecnica</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li>Menu 1</li>
+                    <li>Menu 2</li>
+                    <li>Menu 3</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="dx-container">
+            <div class="header">
+                <div class="toggle-sx-container" onclick="toggleSxContainer()">
+                    <i class="fa fa-solid fa-x fa-xl"></i>
+                </div>
+                <div class="page-title">
+                    <h2>@ViewBag.Title</h2>
+                </div>
+                <div class="user-actions">
+                    <p onclick="toggleUserMenu()">Nome utente &nbsp;<i class="fa fa-solid fa-angle-down"></i></p>
+                    <div class="user-dropdown" style="display:none;">
+                        <ul>
+                            <li>Modifica account</li>
+                            <li>Logout</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="contenitore-principale">
+                @RenderBody()
+            </div>
+        </div>
+        <script>
+            function toggleSxContainer() {
+                var icona = $('.dx-container .header .toggle-sx-container i.fa');
+                if (icona.hasClass('fa-x')) {
+                    $('.sx-container').hide();
+                    $('.dx-container').css('padding-left', 0);
+                    icona.removeClass('fa-x').addClass('fa-bars');
+                } else {
+                    icona.removeClass('fa-bars').addClass('fa-x');
+                    $('.dx-container').css('padding-left', $('.sx-container').width() + 'px');
+                    $('.sx-container').show();
+                }
+            }
+
+            function toggleUserMenu() {
+                $('.user-dropdown').toggle();
+                $('.user-actions p i.fa').toggleClass('fa-angle-down').toggleClass('fa-angle-up');
+            }
+        </script>
+    </div>
+</body>
+</html>

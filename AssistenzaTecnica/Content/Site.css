@@ -1,0 +1,206 @@
+﻿/* costanti css per il sito */
+:root {
+    --sx-container-width: 250px;
+    --header-height: 100px;
+    --sx-container-bgcolor: #2c313e;
+    --sx-menu-hover-color: #393e50;
+    --user-action-bgcolor: #800080;
+}
+
+/* _layout */
+body {
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+.sx-container {
+    width: var(--sx-container-width);
+    position: fixed;
+    height: 100%;
+    background-color: var(--sx-container-bgcolor);
+}
+
+    .sx-container .site-title {
+        height: var(--header-height);
+        line-height: 100px;
+    }
+
+        .sx-container .site-title h1 {
+            color: white;
+            font-size: 28px;
+            margin: 0;
+            text-align: center;
+        }
+
+    .sx-container nav {
+        height: calc(100% - var(--header-height));
+    }
+
+        .sx-container nav ul {
+            list-style-type: none;
+            margin-top: 50px;
+            padding: 0 30px;
+        }
+
+            .sx-container nav ul li {
+                height: 50px;
+                line-height: 50px;
+                font-size: 17px;
+                color: white;
+                cursor: pointer;
+            }
+
+                .sx-container nav ul li:hover {
+                    background-color: var(--sx-menu-hover-color);
+                }
+
+.dx-container {
+    width: calc(100% - var(--sx-container-width));
+    padding-left: var(--sx-container-width);
+}
+
+    .dx-container .header {
+        line-height: var(--header-height);
+        height: var(--header-height);
+        width: 100%;
+        border-bottom: 1px solid black;
+    }
+
+        .dx-container .header .toggle-sx-container {
+            position: absolute;
+            width: 19px;
+            height: 15px;
+            line-height: 15px;
+            padding: 8px;
+            border: 1pt solid #d5d5d5;
+            cursor: pointer;
+        }
+
+            .dx-container .header .toggle-sx-container i.fa {
+                color: #a5a5a5;
+            }
+
+        .dx-container .header .page-title {
+            float: left;
+            width: 66%;
+        }
+
+            .dx-container .header .page-title h2 {
+                font-size: 24px;
+                color: black;
+                margin: 0;
+                padding-left: 4%;
+            }
+
+        .dx-container .header .user-actions {
+            float: left;
+            width: 34%;
+            background-color: var(--user-action-bgcolor);
+            margin-top: 20px;
+            height: 60px;
+            line-height: 60px;
+        }
+
+            .dx-container .header .user-actions .user-dropdown {
+                background-color: var(--user-action-bgcolor);
+                color: white;
+            }
+
+                .dx-container .header .user-actions .user-dropdown ul {
+                    list-style-type: none;
+                    margin: 0;
+                    padding-bottom: 15px;
+                }
+
+                    .dx-container .header .user-actions .user-dropdown ul li {
+                        line-height: 35px;
+                        cursor: pointer;
+                    }
+
+            .dx-container .header .user-actions p {
+                color: white;
+                font-size: 20px;
+                padding-left: 4%;
+                cursor: pointer;
+            }
+
+.body-container {
+    margin: 25px 5%;
+    width: 90%;
+}
+
+/* tabella richieste */
+table.richieste {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px #cbcbcb;
+}
+
+    table.richieste thead tr {
+        background-color: #d4eeff;
+        color: black;
+    }
+
+    table.richieste td, table.richieste th {
+        padding: 5px 1%;
+        border: 1px solid #747474;
+        min-width: 30px;
+    }
+
+    table.richieste tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    table.richieste td.detail {
+        padding: 0;
+        cursor: pointer;
+    }
+
+/* form richieste */
+div.input {
+    margin-top: 10px;
+}
+
+    div.input.testo label {
+        width: 180px;
+        display: block;
+        float: left;
+        font-weight: 600;
+        line-height: 25px;
+    }
+
+    div.input.testo textarea, div.input.testo input, div.input.testo select {
+        width: calc(100% - 190px);
+        max-width: 500px;
+        min-width: 200px;
+    }
+
+    div.input.testo input, div.input.testo select {
+        height: 20px;
+    }
+
+    div.input.testo select {
+        height: 25px;
+    }
+
+    div.input.testo textarea {
+        height: 200px;
+    }
+
+    div.input input[type="submit"] {
+        height: 30px;
+        width: 150px;
+        margin-top: 20px;
+    }
+
+div.elenco-dettagli {
+    margin-top: 30px;
+}
+
+    div.elenco-dettagli h4 {
+        margin-bottom: 10px;
+        text-decoration: underline;
+    }

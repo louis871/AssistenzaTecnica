@@ -1,0 +1,67 @@
+﻿
+@{
+    AssistenzaTecnica.Models.Richiesta r = Model;
+    if (r.Id == 0)
+    {
+        ViewBag.Title = "Dettagli della nuova richiesta";
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli della richiesta #" + r.Id;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaDatiBaseRichiesta")" method="post">
+        <input type="hidden" name="id" value="@r.Id" />
+        <div class="input testo">
+            <label>Testo della richiesta</label>
+            <textarea name="testo">@r.Testo</textarea>
+        </div>
+        <div class="input testo">
+            <label>Riferimento</label>
+            <input type="text" name="riferimento" value="@r.Riferimento" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-richiesta" value="Salva le modifiche" />
+        </div>
+    </form>
+
+    @if (r.Id > 0)
+    {
+    <div class="elenco-dettagli">
+        <h4>Stati:</h4>
+        <table class="richieste">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Stato</th>
+                    <th>Utente inserimento</th>
+                    <th>Data inserimento</th>
+                    <th>Assegnato</th>
+                    <th>Ore lavorate</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AssistenzaTecnica.Models.Richiesta.StatoRichiesta s in r.StoricoStati.Values)
+                {
+                    <tr>
+                        <td>@s.Id</td>
+                        <td>@s.Stato.Descrizione</td>
+                        <td>@s.Utente.Nome</td>
+                        <td align="center">@s.DataAggiunta.ToString()</td>
+                        <td>@s.Assegnazione</td>
+                        <td align="right">@s.OreLavorate.ToString("N2")</td>
+                        <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStoricoRichiesta", new { idStatoRichiesta = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="input">
+        <input type="submit" name="nuovo-stato-richiesta" value="Nuovo stato" onclick="window.location.href = '@Url.Action("NuovoStoricoRichiesta", new { idRichiesta = r.Id })'"/>
+    </div>
+    }
+</div>
