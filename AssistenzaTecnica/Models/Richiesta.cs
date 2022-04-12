@@ -55,6 +55,12 @@ namespace AssistenzaTecnica.Models
             _richiesteDalc.SalvaRichiesta(this);
         }
 
+        public static void EliminaDaDb(int idRichiesta)
+        {
+            RichiesteDalc richiesteDalc = new RichiesteDalc(); 
+            richiesteDalc.eliminaRichiesta(idRichiesta);
+        }
+
         public class StatoRichiesta
         {
             private RichiesteDalc _richiesteDalc = new RichiesteDalc();
@@ -79,6 +85,12 @@ namespace AssistenzaTecnica.Models
             public void SalvaSuDb()
             {
                 _richiesteDalc.SalvaStatoRichiesta(this);
+            }
+
+            public static void EliminaDaDb(int idStatoRichiesta)
+            {
+                RichiesteDalc richiesteDalc = new RichiesteDalc(); 
+                richiesteDalc.eliminaStatoRichiesta(idStatoRichiesta);
             }
         }
     }

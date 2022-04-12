@@ -1,0 +1,26 @@
+﻿@{
+    AssistenzaTecnica.Models.Utente u = Model;
+    if (u.Id == 0)
+    {
+        ViewBag.Title = "Dettagli del nuovo utente";
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli dell'utente #" + u.Id;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaUtente")" method="post">
+        <input type="hidden" name="id" value="@u.Id" />
+        <div class="input testo">
+            <label>Nome</label>
+            <input type="text" name="Nome" value="@u.Nome" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-utente" value="Salva le modifiche" />
+        </div>
+    </form>
+</div>
+

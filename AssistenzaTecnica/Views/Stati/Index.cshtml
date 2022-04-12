@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Elenco Stati";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, AssistenzaTecnica.Models.Stato> stati = Model;
+}
+
+<div class="body-container">
+    <table class="richieste">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descrizione</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AssistenzaTecnica.Models.Stato s in stati.Values)
+            {
+                <tr>
+                    <td>@s.Id</td>
+                    <td>@s.Descrizione</td>
+                    <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStato", new { idStato = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    <td align="center" class="detail" title="Elimina" onclick="eliminaStato(@s.Id, '@Url.Action("EliminaStato", new { idStato = s.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="input">
+        <input type="submit" name="nuovo-stato" value="Nuovo stato" onclick="window.location.href = '@Url.Action("NuovoStato")'" />
+    </div>
+    <script>
+        function eliminaStato(idStato, azioneEliminazione) {
+            if (confirm("Si è certi di voler eliminare lo stato #" + idStato + "?")) {
+                window.location.href = azioneEliminazione;
+            }
+        }
+    </script>
+</div>
+

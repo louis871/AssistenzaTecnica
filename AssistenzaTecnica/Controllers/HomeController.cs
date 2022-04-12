@@ -72,6 +72,16 @@ namespace AssistenzaTecnica.Controllers
             return View("EditRichiesta", richiesta);
         }
 
+        public ActionResult EliminaRichiesta(int idRichiesta)
+        {
+            Richiesta.EliminaDaDb(idRichiesta);
+            return RedirectToAction("Index");
+        }
 
+        public ActionResult EliminaStoricoRichiesta(int idStatoRichiesta, int idRichiesta)
+        {
+            Richiesta.StatoRichiesta.EliminaDaDb(idStatoRichiesta);
+            return RedirectToAction("EditRichiesta", new { idRichiesta = idRichiesta });
+        }
     }
 }

@@ -199,6 +199,26 @@ namespace AssistenzaTecnica.DataAccessLayer
             }
         }
 
+        public void eliminaRichiesta(int idRichiesta)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand comm = new SqlCommand("DELETE FROM richieste WHERE id = " + idRichiesta, conn);
+                conn.Open();
+                comm.ExecuteNonQuery();
+            }
+        }
 
+        public void eliminaStatoRichiesta(int idStatoRichiesta)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand comm = new SqlCommand("DELETE FROM stati_richieste WHERE id = " + idStatoRichiesta, conn);
+                conn.Open();
+                comm.ExecuteNonQuery();
+            }
+        }
     }
 }

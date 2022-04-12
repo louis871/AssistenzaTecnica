@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Elenco Utenti";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, AssistenzaTecnica.Models.Utente> utenti = Model;
+}
+
+<div class="body-container">
+    <table class="richieste">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AssistenzaTecnica.Models.Utente u in utenti.Values)
+            {
+                <tr>
+                    <td>@u.Id</td>
+                    <td>@u.Nome</td>
+                    <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditUtente", new { idUtente = u.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    <td align="center" class="detail" title="Elimina" onclick="eliminaUtente(@u.Id, '@u.Nome', '@Url.Action("EliminaUtente", new { idUtente = u.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="input">
+        <input type="submit" name="nuovo-utente" value="Nuovo utente" onclick="window.location.href = '@Url.Action("NuovoUtente")'" />
+    </div>
+    <script>
+        function eliminaUtente(idUtente, nomeUtente, azioneEliminazione) {
+            if (confirm("Si è certi di voler eliminare l'utente #" + idUtente + " (" + nomeUtente + ")?")) {
+                window.location.href = azioneEliminazione;
+            }
+        }
+    </script>
+</div>
+

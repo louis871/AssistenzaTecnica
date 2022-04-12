@@ -1,0 +1,26 @@
+﻿@{
+    AssistenzaTecnica.Models.Stato s = Model;
+    if (s.Id == 0)
+    {
+        ViewBag.Title = "Dettagli del nuovo stato";
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli dello stato #" + s.Id;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaStato")" method="post">
+        <input type="hidden" name="id" value="@s.Id" />
+        <div class="input testo">
+            <label>Descrizione</label>
+            <input type="text" name="Descrizione" value="@s.Descrizione" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-stato" value="Salva le modifiche" />
+        </div>
+    </form>
+</div>
+

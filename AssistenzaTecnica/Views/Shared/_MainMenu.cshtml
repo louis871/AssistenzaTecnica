@@ -1,0 +1,11 @@
+﻿@{ 
+    string controllerName = Url.RequestContext.RouteData.Values["controller"].ToString().ToLower();
+}
+
+<nav>
+    <ul>
+        <li class="@(controllerName == "home" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Home")'">Gestione richieste</li>
+        <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'">Gestione stati</li>
+        <li class="@(controllerName == "utenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Utenti")'">Gestione utenti</li>
+    </ul>
+</nav>

@@ -121,6 +121,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StatiController.cs" />
+    <Compile Include="Controllers\UtentiController.cs" />
     <Compile Include="DataAccessLayer\RichiesteDalc.cs" />
     <Compile Include="DataAccessLayer\StatiDalc.cs" />
     <Compile Include="DataAccessLayer\UtentiDalc.cs" />
@@ -196,6 +198,11 @@
     <Content Include="Views\Shared\_Scripts.cshtml" />
     <Content Include="Views\Home\EditRichiesta.cshtml" />
     <Content Include="Views\Home\EditStoricoRichiesta.cshtml" />
+    <Content Include="Views\Shared\_MainMenu.cshtml" />
+    <Content Include="Views\Stati\Index.cshtml" />
+    <Content Include="Views\Utenti\Index.cshtml" />
+    <Content Include="Views\Stati\EditStato.cshtml" />
+    <Content Include="Views\Utenti\EditUtente.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -53,7 +53,7 @@ p {
                 cursor: pointer;
             }
 
-                .sx-container nav ul li:hover {
+                .sx-container nav ul li.active, .sx-container nav ul li:hover {
                     background-color: var(--sx-menu-hover-color);
                 }
 

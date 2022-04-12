@@ -30,38 +30,47 @@
 
     @if (r.Id > 0)
     {
-    <div class="elenco-dettagli">
-        <h4>Stati:</h4>
-        <table class="richieste">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Stato</th>
-                    <th>Utente inserimento</th>
-                    <th>Data inserimento</th>
-                    <th>Assegnato</th>
-                    <th>Ore lavorate</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (AssistenzaTecnica.Models.Richiesta.StatoRichiesta s in r.StoricoStati.Values)
-                {
+        <div class="elenco-dettagli">
+            <h4>Stati:</h4>
+            <table class="richieste">
+                <thead>
                     <tr>
-                        <td>@s.Id</td>
-                        <td>@s.Stato.Descrizione</td>
-                        <td>@s.Utente.Nome</td>
-                        <td align="center">@s.DataAggiunta.ToString()</td>
-                        <td>@s.Assegnazione</td>
-                        <td align="right">@s.OreLavorate.ToString("N2")</td>
-                        <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStoricoRichiesta", new { idStatoRichiesta = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                        <th>Id</th>
+                        <th>Stato</th>
+                        <th>Utente inserimento</th>
+                        <th>Data inserimento</th>
+                        <th>Assegnato</th>
+                        <th>Ore lavorate</th>
+                        <th></th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                    @foreach (AssistenzaTecnica.Models.Richiesta.StatoRichiesta s in r.StoricoStati.Values)
+                    {
+                        <tr>
+                            <td>@s.Id</td>
+                            <td>@s.Stato.Descrizione</td>
+                            <td>@s.Utente.Nome</td>
+                            <td align="center">@s.DataAggiunta.ToString()</td>
+                            <td>@s.Assegnazione</td>
+                            <td align="right">@s.OreLavorate.ToString("N2")</td>
+                            <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStoricoRichiesta", new { idStatoRichiesta = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                            <td align="center" class="detail" title="Elimina" onclick="eliminaStatoRichiesta(@r.Id, @s.Id, '@Url.Action("EliminaStoricoRichiesta", new { idStatoRichiesta = s.Id, idRichiesta = r.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="input">
+            <input type="submit" name="nuovo-stato-richiesta" value="Nuovo stato" onclick="window.location.href = '@Url.Action("NuovoStoricoRichiesta", new { idRichiesta = r.Id })'" />
+        </div>
+        <script>
+            function eliminaStatoRichiesta(idRichiesta, idStatoRichiesta, azioneEliminazione) {
+                if (confirm("Si è certi di voler eliminare lo stato #" + idStatoRichiesta + " realtivo alla richiesta #" + idRichiesta + "?")) {
+                    window.location.href = azioneEliminazione;
                 }
-            </tbody>
-        </table>
-    </div>
-    <div class="input">
-        <input type="submit" name="nuovo-stato-richiesta" value="Nuovo stato" onclick="window.location.href = '@Url.Action("NuovoStoricoRichiesta", new { idRichiesta = r.Id })'"/>
-    </div>
+            }
+        </script>
     }
 </div>
