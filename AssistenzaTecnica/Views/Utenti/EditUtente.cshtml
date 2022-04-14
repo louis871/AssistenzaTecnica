@@ -18,6 +18,27 @@
             <label>Nome</label>
             <input type="text" name="Nome" value="@u.Nome" />
         </div>
+        <div class="input testo">
+            <label>Username</label>
+            <input type="text" name="Username" value="@u.Username" />
+        </div>
+        <div class="input testo">
+            <label>Nuova Password</label>
+            <input type="text" name="NuovaPassword" value="" />
+        </div>
+        <div class="input testo">
+            <label>Ripeti Password</label>
+            <input type="text" name="RipetiPassword" value="" />
+        </div>
+        <div class="input testo">
+            <label>Profilo</label>
+            <select name="Profilo" @(AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo != (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Amministratore ? "disabled" : "")>
+                @foreach (AssistenzaTecnica.Models.Utente.ProfiliUtente p in Enum.GetValues(typeof(AssistenzaTecnica.Models.Utente.ProfiliUtente)))
+                {
+                    <option value="@((int)p)" @((int)p == u.Profilo ? "selected" : "")>@p.ToString()</option>
+                }
+            </select>
+        </div>
         <div class="input">
             <input type="submit" name="salva-utente" value="Salva le modifiche" />
         </div>

@@ -4,8 +4,17 @@
 
 <nav>
     <ul>
-        <li class="@(controllerName == "home" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Home")'">Gestione richieste</li>
-        <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'">Gestione stati</li>
-        <li class="@(controllerName == "utenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Utenti")'">Gestione utenti</li>
+        @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null)
+        {
+            <li class="@(controllerName == "home" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Home")'">Gestione richieste</li>
+        }
+        @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
+        {
+            <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'">Gestione stati</li>
+        }
+        @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo == (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Amministratore)
+        {
+            <li class="@(controllerName == "utenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Utenti")'">Gestione utenti</li>
+        }
     </ul>
 </nav>

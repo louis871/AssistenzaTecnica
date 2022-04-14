@@ -21,6 +21,7 @@ p {
     position: fixed;
     height: 100%;
     background-color: var(--sx-container-bgcolor);
+    user-select: none;
 }
 
     .sx-container .site-title {
@@ -67,6 +68,7 @@ p {
         height: var(--header-height);
         width: 100%;
         border-bottom: 1px solid black;
+        user-select: none;
     }
 
         .dx-container .header .toggle-sx-container {
@@ -107,6 +109,7 @@ p {
             .dx-container .header .user-actions .user-dropdown {
                 background-color: var(--user-action-bgcolor);
                 color: white;
+                position: relative;
             }
 
                 .dx-container .header .user-actions .user-dropdown ul {
@@ -131,6 +134,19 @@ p {
     margin: 25px 5%;
     width: 90%;
 }
+
+/* login */
+    .body-container .login {
+        margin: 0 auto;
+        padding: 10px;
+        max-width: 450px;
+        min-width: 200px;
+        width: 100%;
+        border: 1px solid #979797;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #e3e3e3;
+        background-color: #fafdff;
+    }
 
 /* tabella richieste */
 table.richieste {

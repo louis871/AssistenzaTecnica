@@ -26,13 +26,16 @@
                     <h2>@ViewBag.Title</h2>
                 </div>
                 <div class="user-actions">
-                    <p onclick="toggleUserMenu()">Nome utente &nbsp;<i class="fa fa-solid fa-angle-down"></i></p>
+                    @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null)
+                    {
+                    <p onclick="toggleUserMenu()">@AssistenzaTecnica.Models.Utente.UtenteConnesso.Nome &nbsp;<i class="fa fa-solid fa-angle-down"></i></p>
                     <div class="user-dropdown" style="display:none;">
                         <ul>
-                            <li>Modifica account</li>
-                            <li>Logout</li>
+                            <li onclick="window.location.href='@Url.Action("EditUtente", "Utenti", new { idUtente = AssistenzaTecnica.Models.Utente.UtenteConnesso.Id })'">Modifica account</li>
+                            <li onclick="window.location.href='@Url.Action("Logout", "Home")'">Logout</li>
                         </ul>
                     </div>
+                    }
                 </div>
             </div>
             <div id="contenitore-principale">
