@@ -21,7 +21,13 @@
         </div>
         <div class="input testo">
             <label>Riferimento</label>
-            <input type="text" name="riferimento" value="@r.Riferimento" />
+            <select name="IdRiferimento">
+                <option value="" @(r.IdRiferimento.HasValue ? "" : "selected")></option>
+                @foreach (AssistenzaTecnica.Models.Riferimento rif in ViewBag.AllRiferimenti.Values)
+                {
+                    <option value="@rif.Id" @(rif.Id == r.IdRiferimento ? "selected" : "")>@rif.Descrizione</option>
+                }
+            </select>
         </div>
         <div class="input">
             <input type="submit" name="salva-richiesta" value="Salva le modifiche" />
@@ -39,7 +45,7 @@
                         <th>Stato</th>
                         <th>Utente inserimento</th>
                         <th>Data inserimento</th>
-                        <th>Assegnato</th>
+                        <th>Assegnato a</th>
                         <th>Ore lavorate</th>
                         <th></th>
                         <th></th>
@@ -53,7 +59,7 @@
                             <td>@s.Stato.Descrizione</td>
                             <td>@s.Utente.Nome</td>
                             <td align="center">@s.DataAggiunta.ToString()</td>
-                            <td>@s.Assegnazione</td>
+                            <td>@(s.Assegnazione == null ? "" : s.Assegnazione.Nome)</td>
                             <td align="right">@s.OreLavorate.ToString("N2")</td>
                             <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStoricoRichiesta", new { idStatoRichiesta = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
                             <td align="center" class="detail" title="Elimina" onclick="eliminaStatoRichiesta(@r.Id, @s.Id, '@Url.Action("EliminaStoricoRichiesta", new { idStatoRichiesta = s.Id, idRichiesta = r.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>

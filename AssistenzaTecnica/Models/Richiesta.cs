@@ -12,7 +12,8 @@ namespace AssistenzaTecnica.Models
 
         public int Id { get; set; }
         public string Testo { get; set; }
-        public string Riferimento { get; set; }
+        public int? IdRiferimento { get; set; }
+        public Riferimento Riferimento { get; set; }
         public SortedDictionary<int, StatoRichiesta> StoricoStati { get; set; }
         public StatoRichiesta StatoCorrente
         {
@@ -72,7 +73,8 @@ namespace AssistenzaTecnica.Models
             public Utente Utente { get; set; }
             public int IdUtente { get; set; }
             public DateTime DataAggiunta { get; set; }
-            public string Assegnazione { get; set; }
+            public int? IdAssegnazione { get; set; }
+            public Assegnato Assegnazione { get; set; }
             public double OreLavorate { get; set; }
 
             public StatoRichiesta() { }

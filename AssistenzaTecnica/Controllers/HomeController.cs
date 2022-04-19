@@ -15,6 +15,9 @@ namespace AssistenzaTecnica.Controllers
             if (Utente.UtenteConnesso == null)
                 return RedirectToAction("Login");
 
+            ViewBag.AllStati = Stato.getAllStati();
+            ViewBag.AllRiferimenti = Riferimento.getAllRiferimenti();
+
             Dictionary<int, Richiesta> richieste = Richiesta.getAllFromDB();
             return View(richieste);
         }
@@ -27,6 +30,8 @@ namespace AssistenzaTecnica.Controllers
             if ( !idRichiesta.HasValue || idRichiesta.Value == 0 )
                 return RedirectToAction("Index");
 
+            ViewBag.AllRiferimenti = Riferimento.getAllRiferimenti();
+
             return View(new Richiesta(idRichiesta.Value));
         }
 
@@ -35,10 +40,12 @@ namespace AssistenzaTecnica.Controllers
             if (Utente.UtenteConnesso == null)
                 return RedirectToAction("Login");
 
+            ViewBag.AllRiferimenti = Riferimento.getAllRiferimenti();
+
             Richiesta richiesta = new Richiesta();
             richiesta.Id = 0;
             richiesta.StoricoStati = new SortedDictionary<int, Richiesta.StatoRichiesta>();
-
+            
             return View("EditRichiesta", richiesta);
         }
 
@@ -68,6 +75,7 @@ namespace AssistenzaTecnica.Controllers
 
             ViewBag.AllStati = Stato.getAllStati();
             ViewBag.AllUtenti = Utente.getAllUtenti();
+            ViewBag.AllAssegnati = Assegnato.getAllAssegnati();
 
             return View(new Richiesta.StatoRichiesta(idStatoRichiesta.Value));
         }
@@ -82,6 +90,7 @@ namespace AssistenzaTecnica.Controllers
 
             ViewBag.AllStati = Stato.getAllStati();
             ViewBag.AllUtenti = Utente.getAllUtenti();
+            ViewBag.AllAssegnati = Assegnato.getAllAssegnati();
 
             Richiesta.StatoRichiesta sr = new Richiesta.StatoRichiesta();
             sr.IdRichiesta = idRichiesta.Value;

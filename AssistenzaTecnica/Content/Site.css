@@ -135,7 +135,7 @@ p {
     width: 90%;
 }
 
-/* login */
+    /* login */
     .body-container .login {
         margin: 0 auto;
         padding: 10px;
@@ -160,11 +160,20 @@ table.richieste {
         color: black;
     }
 
+    table.richieste th {
+        vertical-align: top;
+    }
+
     table.richieste td, table.richieste th {
         padding: 5px 1%;
         border: 1px solid #747474;
         min-width: 30px;
     }
+
+        table.richieste th .filtro {
+            width: 100%;
+            margin-top: 5px;
+        }
 
     table.richieste tbody tr:nth-of-type(even) {
         background-color: #f3f3f3;

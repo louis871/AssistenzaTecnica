@@ -120,16 +120,22 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AssegnatiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RiferimentiController.cs" />
     <Compile Include="Controllers\StatiController.cs" />
     <Compile Include="Controllers\UtentiController.cs" />
+    <Compile Include="DataAccessLayer\AssegnatiDalc.cs" />
     <Compile Include="DataAccessLayer\RichiesteDalc.cs" />
+    <Compile Include="DataAccessLayer\RiferimentiDalc.cs" />
     <Compile Include="DataAccessLayer\StatiDalc.cs" />
     <Compile Include="DataAccessLayer\UtentiDalc.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Assegnato.cs" />
     <Compile Include="Models\Richiesta.cs" />
+    <Compile Include="Models\Riferimento.cs" />
     <Compile Include="Models\Stato.cs" />
     <Compile Include="Models\Utente.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,6 +210,10 @@
     <Content Include="Views\Stati\EditStato.cshtml" />
     <Content Include="Views\Utenti\EditUtente.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Riferimenti\Index.cshtml" />
+    <Content Include="Views\Riferimenti\EditRiferimento.cshtml" />
+    <Content Include="Views\Assegnati\Index.cshtml" />
+    <Content Include="Views\Assegnati\EditAssegnato.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

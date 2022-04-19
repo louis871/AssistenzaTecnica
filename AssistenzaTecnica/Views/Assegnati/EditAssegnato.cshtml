@@ -1,0 +1,25 @@
+﻿@{
+    AssistenzaTecnica.Models.Assegnato a = Model;
+    if (a.Id == 0)
+    {
+        ViewBag.Title = "Dettagli del nuovo tecnico";
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli del tecnico #" + a.Id;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaAssegnato")" method="post">
+        <input type="hidden" name="id" value="@a.Id" />
+        <div class="input testo">
+            <label>Nome</label>
+            <input type="text" name="Nome" value="@a.Nome" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-assegnato" value="Salva le modifiche" />
+        </div>
+    </form>
+</div>

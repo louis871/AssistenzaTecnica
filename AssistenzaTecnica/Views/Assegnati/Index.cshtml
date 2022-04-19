@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Elenco Tecnici";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, AssistenzaTecnica.Models.Assegnato> assegnati = Model;
+}
+
+<div class="body-container">
+    <table class="richieste">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nome</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AssistenzaTecnica.Models.Assegnato a in assegnati.Values)
+            {
+                <tr>
+                    <td>@a.Id</td>
+                    <td>@a.Nome</td>
+                    <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditAssegnato", new { idAssegnato = a.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    <td align="center" class="detail" title="Elimina" onclick="eliminaAssegnato(@a.Id, '@Url.Action("EliminaAssegnato", new { idAssegnato = a.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="input">
+        <input type="submit" name="nuovo-assegnato" value="Nuovo tecnico" onclick="window.location.href = '@Url.Action("NuovoAssegnato")'" />
+    </div>
+    <script>
+        function eliminaAssegnato(idAssegnato, azioneEliminazione) {
+            if (confirm("Si è certi di voler eliminare il tecnico #" + idAssegnato + "?")) {
+                window.location.href = azioneEliminazione;
+            }
+        }
+    </script>
+</div>

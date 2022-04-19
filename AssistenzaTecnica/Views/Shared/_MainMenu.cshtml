@@ -10,6 +10,14 @@
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
         {
+            <li class="@(controllerName == "riferimenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Riferimenti")'">Lista Riferimenti</li>
+        }
+        @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
+        {
+            <li class="@(controllerName == "assegnati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Assegnati")'">Lista Tecnici</li>
+        }
+        @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
+        {
             <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'">Gestione stati</li>
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo == (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Amministratore)

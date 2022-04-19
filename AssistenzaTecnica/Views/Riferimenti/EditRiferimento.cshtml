@@ -1,0 +1,25 @@
+﻿@{
+    AssistenzaTecnica.Models.Riferimento r = Model;
+    if (r.Id == 0)
+    {
+        ViewBag.Title = "Dettagli del nuovo riferimento";
+    }
+    else
+    {
+        ViewBag.Title = "Dettagli del riferimento #" + r.Id;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="body-container">
+    <form action="@Url.Action("SalvaRiferimento")" method="post">
+        <input type="hidden" name="id" value="@r.Id" />
+        <div class="input testo">
+            <label>Descrizione</label>
+            <input type="text" name="Descrizione" value="@r.Descrizione" />
+        </div>
+        <div class="input">
+            <input type="submit" name="salva-riferimento" value="Salva le modifiche" />
+        </div>
+    </form>
+</div>

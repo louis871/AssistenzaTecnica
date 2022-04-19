@@ -24,17 +24,33 @@ namespace AssistenzaTecnica.DataAccessLayer
             _utenti = utentiDalc.getAllUtenti();
         }
 
+        private Dictionary<int, Riferimento> _riferimenti = new Dictionary<int, Riferimento>();
+        private void riempiRiferimentiDaDB()
+        {
+            RiferimentiDalc riferimentiDalc = new RiferimentiDalc();
+            _riferimenti = riferimentiDalc.getAllRiferimenti();
+        }
+
+        private Dictionary<int, Assegnato> _assegnati = new Dictionary<int, Assegnato>();
+        private void riempiAssegnatiDaDB()
+        {
+            AssegnatiDalc assegnatiDalc = new AssegnatiDalc();
+            _assegnati = assegnatiDalc.getAllAssegnati();
+        }
+
         public Dictionary<int, Richiesta> getAllRichieste()
         {
             riempiStatiDaDB();
             riempiUtentiDaDB();
-            
+            riempiRiferimentiDaDB();
+            riempiAssegnatiDaDB();
+
             Dictionary<int, Richiesta> listaRichieste = new Dictionary<int, Richiesta>();
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT id, testo, riferimento FROM richieste", conn);
+                SqlCommand comm = new SqlCommand("SELECT r.id, r.testo, r.id_riferimenti, (SELECT MAX(sr.data_aggiunta) FROM stati_richieste sr WHERE r.id = sr.id_richieste) as data_ultima_modifica FROM richieste r ORDER BY data_ultima_modifica DESC", conn);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();
                 while (reader.Read())
@@ -42,7 +58,8 @@ namespace AssistenzaTecnica.DataAccessLayer
                     Richiesta richiesta = new Richiesta();
                     richiesta.Id = reader.GetInt32(0);
                     richiesta.Testo = reader.GetString(1);
-                    richiesta.Riferimento = reader[2] == DBNull.Value ? null : reader.GetString(2);
+                    richiesta.IdRiferimento = reader[2] == DBNull.Value ? null : (int?)reader.GetInt32(2);
+                    richiesta.Riferimento = richiesta.IdRiferimento.HasValue ? _riferimenti[richiesta.IdRiferimento.Value] : null;
                     richiesta.StoricoStati = getStoricoStatiRichiesta(richiesta.Id);
                     listaRichieste.Add(richiesta.Id, richiesta);
                 }
@@ -57,7 +74,7 @@ namespace AssistenzaTecnica.DataAccessLayer
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString; 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT id, id_stati, id_utenti, data_aggiunta, assegnazione, ore_lavorate FROM stati_richieste WHERE id_richieste = " + idRichiesta, conn);
+                SqlCommand comm = new SqlCommand("SELECT id, id_stati, id_utenti, data_aggiunta, id_assegnati, ore_lavorate FROM stati_richieste WHERE id_richieste = " + idRichiesta, conn);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();
                 while (reader.Read())
@@ -68,7 +85,8 @@ namespace AssistenzaTecnica.DataAccessLayer
                     sr.Stato = _stati[reader.GetInt32(1)];
                     sr.Utente = _utenti[reader.GetInt32(2)];
                     sr.DataAggiunta = reader.GetDateTime(3);
-                    sr.Assegnazione = reader.IsDBNull(4) ? null : reader.GetString(4);
+                    sr.IdAssegnazione = reader[4] == DBNull.Value ? null : (int?)reader.GetInt32(4);
+                    sr.Assegnazione = sr.IdAssegnazione.HasValue ? _assegnati[sr.IdAssegnazione.Value] : null;
                     sr.OreLavorate = reader.IsDBNull(5) ? 0 : reader.GetDouble(5);
                     listaStatiRichiesta.Add(sr.Id, sr);
                 }
@@ -81,19 +99,22 @@ namespace AssistenzaTecnica.DataAccessLayer
         {
             riempiStatiDaDB();
             riempiUtentiDaDB();
+            riempiRiferimentiDaDB();
+            riempiAssegnatiDaDB();
 
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT id, testo, riferimento FROM richieste WHERE id = " + idRichiesta, conn);
+                SqlCommand comm = new SqlCommand("SELECT id, testo, id_riferimenti FROM richieste WHERE id = " + idRichiesta, conn);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();
                 if (reader.Read())
                 {
                     richiesta.Id = reader.GetInt32(0);
                     richiesta.Testo = reader.GetString(1);
-                    richiesta.Riferimento = reader[2] == DBNull.Value ? null : reader.GetString(2);
+                    richiesta.IdRiferimento = reader[2] == DBNull.Value ? null : (int?)reader.GetInt32(2);
+                    richiesta.Riferimento = richiesta.IdRiferimento.HasValue ? _riferimenti[richiesta.IdRiferimento.Value] : null;
                     richiesta.StoricoStati = getStoricoStatiRichiesta(richiesta.Id);
                 }
             }
@@ -108,12 +129,12 @@ namespace AssistenzaTecnica.DataAccessLayer
                 conn.Open();
                 if ( richiesta.Id == 0 )
                 {
-                    comm = new SqlCommand("INSERT INTO richieste (testo, riferimento) OUTPUT Inserted.ID VALUES (@testo, @riferimento)", conn);
+                    comm = new SqlCommand("INSERT INTO richieste (testo, id_riferimenti) OUTPUT Inserted.ID VALUES (@testo, @id_riferimento)", conn);
                     comm.Parameters.AddWithValue("@testo", richiesta.Testo);
-                    if( richiesta.Riferimento == null )
-                        comm.Parameters.AddWithValue("@riferimento", DBNull.Value);
+                    if( !richiesta.IdRiferimento.HasValue )
+                        comm.Parameters.AddWithValue("@id_riferimento", DBNull.Value);
                     else
-                        comm.Parameters.AddWithValue("@riferimento", richiesta.Riferimento);
+                        comm.Parameters.AddWithValue("@id_riferimento", richiesta.IdRiferimento.Value);
                     object idInserito = comm.ExecuteScalar();
                     comm = new SqlCommand("INSERT INTO stati_richieste (id_richieste, id_stati, id_utenti, data_aggiunta) VALUES (@id_richieste, @id_stati, @id_utenti, @data_aggiunta)", conn);
                     comm.Parameters.AddWithValue("@id_richieste", (int)idInserito);
@@ -124,12 +145,12 @@ namespace AssistenzaTecnica.DataAccessLayer
                 }
                 else
                 {
-                    comm = new SqlCommand("UPDATE richieste SET testo = @testo, riferimento = @riferimento WHERE id = @id", conn);
+                    comm = new SqlCommand("UPDATE richieste SET testo = @testo, id_riferimenti = @id_riferimento WHERE id = @id", conn);
                     comm.Parameters.AddWithValue("@testo", richiesta.Testo);
-                    if (richiesta.Riferimento == null)
-                        comm.Parameters.AddWithValue("@riferimento", DBNull.Value);
+                    if (!richiesta.IdRiferimento.HasValue)
+                        comm.Parameters.AddWithValue("@id_riferimento", DBNull.Value);
                     else
-                        comm.Parameters.AddWithValue("@riferimento", richiesta.Riferimento);
+                        comm.Parameters.AddWithValue("@id_riferimento", richiesta.IdRiferimento.Value);
                     comm.Parameters.AddWithValue("@id", richiesta.Id);
                     comm.ExecuteNonQuery();
                 }
@@ -140,11 +161,12 @@ namespace AssistenzaTecnica.DataAccessLayer
         {
             riempiStatiDaDB();
             riempiUtentiDaDB();
-            
+            riempiAssegnatiDaDB();
+
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT id, id_richieste, id_stati, id_utenti, data_aggiunta, assegnazione, ore_lavorate FROM stati_richieste WHERE id = " + idStatoRichiesta, conn);
+                SqlCommand comm = new SqlCommand("SELECT id, id_richieste, id_stati, id_utenti, data_aggiunta, id_assegnati, ore_lavorate FROM stati_richieste WHERE id = " + idStatoRichiesta, conn);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();
                 if (reader.Read())
@@ -154,7 +176,8 @@ namespace AssistenzaTecnica.DataAccessLayer
                     sr.Stato = _stati[reader.GetInt32(2)];
                     sr.Utente = _utenti[reader.GetInt32(3)];
                     sr.DataAggiunta = reader.GetDateTime(4);
-                    sr.Assegnazione = reader.IsDBNull(5) ? null : reader.GetString(5);
+                    sr.IdAssegnazione = reader.IsDBNull(5) ? null : (int?)reader.GetInt32(5);
+                    sr.Assegnazione = sr.IdAssegnazione.HasValue ? _assegnati[sr.IdAssegnazione.Value] : null;
                     sr.OreLavorate = reader.IsDBNull(6) ? 0 : reader.GetDouble(6);
                 }
             }
@@ -168,29 +191,29 @@ namespace AssistenzaTecnica.DataAccessLayer
                 SqlCommand comm;
                 if (sr.Id == 0)
                 {
-                    comm = new SqlCommand("INSERT INTO stati_richieste (id_richieste, id_stati, id_utenti, data_aggiunta, assegnazione, ore_lavorate) VALUES (@id_richieste, @id_stati, @id_utenti, @data_aggiunta, @assegnazione, @ore_lavorate)", conn);
+                    comm = new SqlCommand("INSERT INTO stati_richieste (id_richieste, id_stati, id_utenti, data_aggiunta, id_assegnati, ore_lavorate) VALUES (@id_richieste, @id_stati, @id_utenti, @data_aggiunta, @id_assegnati, @ore_lavorate)", conn);
                     comm.Parameters.AddWithValue("@id_richieste", sr.IdRichiesta);
                     comm.Parameters.AddWithValue("@id_stati", sr.IdStato);
                     comm.Parameters.AddWithValue("@id_utenti", sr.IdUtente);
                     comm.Parameters.AddWithValue("@data_aggiunta", sr.DataAggiunta);
-                    if (sr.Assegnazione == null)
-                        comm.Parameters.AddWithValue("@assegnazione", DBNull.Value);
+                    if (!sr.IdAssegnazione.HasValue)
+                        comm.Parameters.AddWithValue("@id_assegnati", DBNull.Value);
                     else
-                        comm.Parameters.AddWithValue("@assegnazione", sr.Assegnazione);
-                   comm.Parameters.AddWithValue("@ore_lavorate", sr.OreLavorate);
+                        comm.Parameters.AddWithValue("@id_assegati", sr.IdAssegnazione.Value);
+                    comm.Parameters.AddWithValue("@ore_lavorate", sr.OreLavorate);
 
                 }
                 else
                 {
-                    comm = new SqlCommand("UPDATE stati_richieste SET id_richieste = @id_richieste, id_stati = @id_stati, id_utenti = @id_utenti, data_aggiunta = @data_aggiunta, assegnazione = @assegnazione, ore_lavorate = @ore_lavorate WHERE id = @id", conn);
+                    comm = new SqlCommand("UPDATE stati_richieste SET id_richieste = @id_richieste, id_stati = @id_stati, id_utenti = @id_utenti, data_aggiunta = @data_aggiunta, id_assegnati = @id_assegnati, ore_lavorate = @ore_lavorate WHERE id = @id", conn);
                     comm.Parameters.AddWithValue("@id_richieste", sr.IdRichiesta);
                     comm.Parameters.AddWithValue("@id_stati", sr.IdStato);
                     comm.Parameters.AddWithValue("@id_utenti", sr.IdUtente);
                     comm.Parameters.AddWithValue("@data_aggiunta", sr.DataAggiunta);
-                    if( sr.Assegnazione == null )
-                        comm.Parameters.AddWithValue("@assegnazione", DBNull.Value);
+                    if (!sr.IdAssegnazione.HasValue)
+                        comm.Parameters.AddWithValue("@id_assegnati", DBNull.Value);
                     else
-                        comm.Parameters.AddWithValue("@assegnazione", sr.Assegnazione);
+                        comm.Parameters.AddWithValue("@id_assegnati", sr.IdAssegnazione.Value);
                     comm.Parameters.AddWithValue("@ore_lavorate", sr.OreLavorate);
                     comm.Parameters.AddWithValue("@id", sr.Id);
                 }

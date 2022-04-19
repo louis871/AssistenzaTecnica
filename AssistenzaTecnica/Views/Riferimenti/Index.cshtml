@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Elenco Riferimenti";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, AssistenzaTecnica.Models.Riferimento> riferimenti = Model;
+}
+
+<div class="body-container">
+    <table class="richieste">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descrizione</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (AssistenzaTecnica.Models.Riferimento r in riferimenti.Values)
+            {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.Descrizione</td>
+                    <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditRiferimento", new { idRiferimento = r.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    <td align="center" class="detail" title="Elimina" onclick="eliminaRiferimento(@r.Id, '@Url.Action("EliminaRiferimento", new { idRiferimento = r.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="input">
+        <input type="submit" name="nuovo-riferimento" value="Nuovo riferimento" onclick="window.location.href = '@Url.Action("NuovoRiferimento")'" />
+    </div>
+    <script>
+        function eliminaRiferimento(idRiferimento, azioneEliminazione) {
+            if (confirm("Si è certi di voler eliminare il riferimento #" + idRiferimento + "?")) {
+                window.location.href = azioneEliminazione;
+            }
+        }
+    </script>
+</div>

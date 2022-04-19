@@ -38,8 +38,14 @@
             <input type="datetime" name="DataAggiunta" value="@sr.DataAggiunta" />
         </div>
         <div class="input testo">
-            <label>Assegnazione</label>
-            <input type="text" name="Assegnazione" value="@sr.Assegnazione" />
+            <label>Assegnato a</label>
+            <select name="IdAssegnazione">
+                <option value="" @(sr.IdAssegnazione.HasValue ? "" : "selected")></option>
+                @foreach (AssistenzaTecnica.Models.Assegnato a in ViewBag.AllAssegnati.Values)
+                {
+                    <option value="@a.Id" @(a.Id == sr.IdAssegnazione ? "selected" : "")>@a.Nome</option>
+                }
+            </select>
         </div>
         <div class="input testo">
             <label>Ore lavorate</label>
