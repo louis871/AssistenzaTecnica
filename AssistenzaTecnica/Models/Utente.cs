@@ -12,7 +12,7 @@ namespace AssistenzaTecnica.Models
 
         private UtentiDalc _utentiDalc = new UtentiDalc();
 
-        public enum ProfiliUtente { TecnicoPrimoLivello, TecnicoOperativo, Organizzatore, Amministratore };
+        public enum ProfiliUtente { Cliente, TecnicoPrimoLivello, TecnicoOperativo, Organizzatore, Amministratore };
 
         public int Id { get; set; }
         public string Nome { get; set; }

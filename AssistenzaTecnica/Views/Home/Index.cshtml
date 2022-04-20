@@ -10,15 +10,15 @@
             <tr>
                 <th>
                     Id<br />
-                    <input type="text" class="filtro" value="" onkeyup="applicaFiltroTestuale(this, 1)" />
+                    <input type="text" class="filtro" value="" onkeyup="aggiornaFiltro(this, 1)" />
                 </th>
                 <th>
                     Testo<br />
-                    <input type="text" class="filtro" value="" onkeyup="applicaFiltroTestuale(this, 2)" />
+                    <input type="text" class="filtro" value="" onkeyup="aggiornaFiltro(this, 2)" />
                 </th>
                 <th>
                     Riferimento<br />
-                    <select class="filtro" onchange="applicaFiltroTestuale(this, 3)">
+                    <select class="filtro" onchange="aggiornaFiltro(this, 3)">
                         <option value="" selected></option>
                         @foreach (AssistenzaTecnica.Models.Riferimento r in ViewBag.AllRiferimenti.Values)
                         {
@@ -28,7 +28,7 @@
                 </th>
                 <th>
                     Stato<br />
-                    <select class="filtro" onchange="applicaFiltroTestuale(this, 4)">
+                    <select class="filtro" onchange="aggiornaFiltro(this, 4)">
                         <option value="" selected></option>
                         @foreach (AssistenzaTecnica.Models.Stato s in ViewBag.AllStati.Values)
                         {
@@ -59,7 +59,14 @@
         </tbody>
     </table>
     <div class="input">
-        <input type="submit" name="nuova-richiesta" value="Nuova richiesta" onclick="window.location.href = '@Url.Action("NuovaRichiesta")'" />
+        <input type="submit" class="paging-left" name="nuova-richiesta" value="Nuova richiesta" onclick="window.location.href = '@Url.Action("NuovaRichiesta")'" />
+        <div class="paging-right">
+            <i class="fa fa-solid fa-angles-right" title="Ultima pagina" onclick="goToLastPage()"></i>
+            <i class="fa fa-solid fa-angle-right" title="Successiva" onclick="goToNextPage()"></i>
+            <span id="pagina-num" class="fa" data-pagina="1">1 di 1</span>
+            <i class="fa fa-solid fa-angle-left" title="Precedente" onclick="goToPrevPage()"></i>
+            <i class="fa fa-solid fa-angles-left" title="Prima pagina" onclick="goToFirstPage()"></i>
+        </div>
     </div>
     <script>
         function eliminaRichiesta(idRichiesta, azioneEliminazione) {
@@ -68,22 +75,111 @@
             }
         }
 
-        function applicaFiltroTestuale(elementoFiltro, colonnaApplicata) {
+        /* filtri */
+        var filtriTabellaRichieste = new Array();
+
+        function aggiornaFiltro(elementoFiltro, colonnaApplicata) {
             var testoFiltro = $(elementoFiltro).val().toLowerCase();
 
+            var filtroEsistente = false;
+            for (var i = 0; i < filtriTabellaRichieste.length; i++) {
+                if (filtriTabellaRichieste[i].colonna == colonnaApplicata) {
+                    filtriTabellaRichieste[i].testo = testoFiltro;
+                    filtroEsistente = true;
+                    break;
+                }
+            }
+            if (!filtroEsistente) {
+                var filtro = { colonna: colonnaApplicata, testo: testoFiltro };
+                filtriTabellaRichieste.push(filtro);
+            }
+            applicaTuttiFiltri();
+        }
+
+        function applicaTuttiFiltri() {
             var indiceRiga = 1;
             $('table.richieste tbody tr').each(function (idx, itm) {
-                $(itm).hide();
-                if ($(itm).children('td:nth-of-type(' + colonnaApplicata + ')').html().toLowerCase().indexOf(testoFiltro) >= 0) {
+                if (!$(itm).hasClass('filtered')) {
+                    $(itm).addClass('filtered');
+                }
+                var filtroOK = true;
+                for (var i = 0; i < filtriTabellaRichieste.length; i++) {
+                    var colonnaApplicata = filtriTabellaRichieste[i].colonna;
+                    var testoFiltro = filtriTabellaRichieste[i].testo;
+
+                    if ($(itm).children('td:nth-of-type(' + colonnaApplicata + ')').html().toLowerCase().indexOf(testoFiltro) < 0) {
+                        filtroOK = false;
+                        break;
+                    }
+                }
+                if (filtroOK) {
+                    $(itm).removeClass('filtered');
                     if (indiceRiga % 2 == 0) {
                         $(itm).css('background-color', '#f3f3f3');
                     } else {
                         $(itm).css('background-color', '#ffffff');
                     }
-                    $(itm).show();
                     indiceRiga++;
                 }
             });
+            applyPaging();
+        }
+
+        /* paging */
+        $(document).ready(function () {
+            applyPaging();
+        });
+
+        var elementiPerPagina = 15;
+
+        function applyPaging() {
+            var paginaAttuale = $('#pagina-num').data('pagina');
+            var elementiTotali = $('table.richieste tbody tr:not(.filtered)').length;
+            var pagineTotali = Math.ceil(elementiTotali / elementiPerPagina);
+            $('#pagina-num').html(paginaAttuale + " su " + pagineTotali);
+
+            var primoElementoVisibile = (paginaAttuale - 1) * elementiPerPagina;
+            var ultimoElementoVisibile = primoElementoVisibile + elementiPerPagina - 1;
+
+            var numRiga = 0;
+            $('table.richieste tbody tr:not(.filtered)').each(function (idx, itm) {
+                if (numRiga >= primoElementoVisibile && numRiga <= ultimoElementoVisibile) {
+                    $(itm).show();
+                } else {
+                    $(itm).hide();
+                }
+                numRiga++;
+            });
+        }
+
+        function goToFirstPage() {
+            $('#pagina-num').data('pagina', 1);
+            applyPaging();
+        }
+
+        function goToPrevPage() {
+            var paginaAttuale = $('#pagina-num').data('pagina');
+            if (paginaAttuale > 1) {
+                $('#pagina-num').data('pagina', parseInt(paginaAttuale) - 1);
+                applyPaging();
+            }
+        }
+
+        function goToNextPage() {
+            var elementiTotali = $('table.richieste tbody tr:not(.filtered)').length;
+            var pagineTotali = Math.ceil(elementiTotali / elementiPerPagina);
+            var paginaAttuale = $('#pagina-num').data('pagina');
+            if (paginaAttuale < pagineTotali) {
+                $('#pagina-num').data('pagina', parseInt(paginaAttuale) + 1);
+                applyPaging();
+            }
+        }
+
+        function goToLastPage() {
+            var elementiTotali = $('table.richieste tbody tr:not(.filtered)').length;
+            var pagineTotali = Math.ceil(elementiTotali / elementiPerPagina);
+            $('#pagina-num').data('pagina', pagineTotali);
+            applyPaging();
         }
     </script>
 </div>

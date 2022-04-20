@@ -179,8 +179,42 @@ table.richieste {
         background-color: #f3f3f3;
     }
 
+    table.richieste tbody tr.filtered{
+        display: none;
+    }
+
     table.richieste td.detail {
         padding: 0;
+        cursor: pointer;
+    }
+
+.paging-left {
+    float: left;
+}
+
+.paging-right {
+    width: calc(100% - 150px);
+    height: 50px;
+    text-align: right;
+    line-height: 50px;
+    float: right;
+    text-align: center;
+}
+
+    .paging-right .fa {
+        float: right;
+        width: 20px;
+    }
+
+    .paging-right span.fa {
+        font-family: initial;
+        font-weight: 400;
+        user-select: none;
+        width: auto;
+        padding: 0 6px;
+    }
+
+    .paging-right i.fa{
         cursor: pointer;
     }
 

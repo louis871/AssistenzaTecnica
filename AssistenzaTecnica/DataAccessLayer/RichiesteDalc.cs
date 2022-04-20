@@ -48,9 +48,53 @@ namespace AssistenzaTecnica.DataAccessLayer
             Dictionary<int, Richiesta> listaRichieste = new Dictionary<int, Richiesta>();
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
 
+            string query = "";
+
+            if (Utente.UtenteConnesso.Profilo >= (int)Utente.ProfiliUtente.Organizzatore)
+            {
+                query = "SELECT " +
+                    "       r.id, " +
+                    "       r.testo, " +
+                    "       r.id_riferimenti, " +
+                    "       (SELECT MAX(sr.data_aggiunta) FROM stati_richieste sr WHERE r.id = sr.id_richieste) as data_ultima_modifica " +
+                    "    FROM richieste r " +
+                    "    ORDER BY data_ultima_modifica DESC";
+            }
+            else if( Utente.UtenteConnesso.Profilo >= (int)Utente.ProfiliUtente.TecnicoPrimoLivello)
+            {
+                query = "SELECT " +
+                    "       r.id, " +
+                    "       r.testo, " +
+                    "       r.id_riferimenti, " +
+                    "       (SELECT MAX(sr.data_aggiunta) FROM stati_richieste sr WHERE r.id = sr.id_richieste) as data_ultima_modifica " +
+                    "    FROM richieste r " +
+                    "    WHERE (SELECT COUNT(sr.id) " +
+                    "           FROM stati_richieste sr " +
+                    "           LEFT JOIN assegnati a ON a.id = sr.id_assegnati " +      
+                    "           WHERE sr.id_richieste = r.id " +
+                    "             AND ( " +
+                    "                   sr.id_utenti = "+ Utente.UtenteConnesso.Id +" " +
+                    "                 OR " +
+                    "                   a.id_utenti = " + Utente.UtenteConnesso.Id + " " +
+                    "                 )" +
+                    "           ) > 0 " +
+                    "    ORDER BY data_ultima_modifica DESC";
+            }
+            else
+            {
+                query = "SELECT " +
+                    "       r.id, " +
+                    "       r.testo, " +
+                    "       r.id_riferimenti, " +
+                    "       (SELECT MAX(sr.data_aggiunta) FROM stati_richieste sr WHERE r.id = sr.id_richieste) as data_ultima_modifica " +
+                    "    FROM richieste r " +
+                    "    LEFT JOIN riferimenti rf ON rf.id = r.id_riferimenti " +
+                    "    WHERE rf.id_utenti = " + Utente.UtenteConnesso.Id + " " +
+                    "    ORDER BY data_ultima_modifica DESC";
+            }
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT r.id, r.testo, r.id_riferimenti, (SELECT MAX(sr.data_aggiunta) FROM stati_richieste sr WHERE r.id = sr.id_richieste) as data_ultima_modifica FROM richieste r ORDER BY data_ultima_modifica DESC", conn);
+                SqlCommand comm = new SqlCommand(query, conn);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();
                 while (reader.Read())

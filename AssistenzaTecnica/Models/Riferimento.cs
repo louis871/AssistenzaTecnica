@@ -17,6 +17,8 @@ namespace AssistenzaTecnica.Models
 
         public int Id { get; set; }
         public string Descrizione { get; set; }
+        public int? IdUtente { get; set; }
+        public Utente Utente { get; set; }
 
         public Riferimento() { }
 
