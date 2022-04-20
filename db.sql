@@ -76,7 +76,4 @@ CREATE TABLE [dbo].[utenti](
 	[profilo] [int] NOT NULL
 ) ON [PRIMARY]
 GO
-USE [master]
-GO
-ALTER DATABASE [assistenza_tecnica] SET  READ_WRITE 
-GO
+
