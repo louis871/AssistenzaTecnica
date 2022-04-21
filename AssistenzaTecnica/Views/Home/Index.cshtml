@@ -39,22 +39,28 @@
                 <th>Data ultima modifica</th>
                 <th>Ore lavorate</th>
                 <th></th>
-                <th></th>
+                @if (AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
             @foreach (AssistenzaTecnica.Models.Richiesta r in richieste.Values)
             {
-            <tr>
-                <td>@r.Id</td>
-                <td>@r.Testo</td>
-                <td>@(r.Riferimento == null ? "" : r.Riferimento.Descrizione)</td>
-                <td>@r.StatoCorrente.Stato.Descrizione</td>
-                <td align="center">@r.StatoCorrente.DataAggiunta.ToString()</td>
-                <td align="right">@r.OreLavorateTotali.ToString("N2")</td>
-                <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditRichiesta", new { idRichiesta = r.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
-                <td align="center" class="detail" title="Elimina" onclick="eliminaRichiesta(@r.Id, '@Url.Action("EliminaRichiesta", new { idRichiesta = r.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
-            </tr>
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.Testo</td>
+                    <td>@(r.Riferimento == null ? "" : r.Riferimento.Descrizione)</td>
+                    <td>@r.StatoCorrente.Stato.Descrizione</td>
+                    <td align="center">@r.StatoCorrente.DataAggiunta.ToString()</td>
+                    <td align="right">@r.OreLavorateTotali.ToString("N2")</td>
+                    <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditRichiesta", new { idRichiesta = r.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
+                    @if (AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
+                    {
+                        <td align="center" class="detail" title="Elimina" onclick="eliminaRichiesta(@r.Id, '@Url.Action("EliminaRichiesta", new { idRichiesta = r.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
+                    }
+                </tr>
             }
         </tbody>
     </table>

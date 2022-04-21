@@ -6,23 +6,23 @@
     <ul>
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null)
         {
-            <li class="@(controllerName == "home" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Home")'">Gestione richieste</li>
+            <li class="@(controllerName == "home" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Home")'"><i class="fa fa-solid fa-table-list"></i>Gestione richieste</li>
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
         {
-            <li class="@(controllerName == "riferimenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Riferimenti")'">Lista Riferimenti</li>
+            <li class="@(controllerName == "riferimenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Riferimenti")'"><i class="fa fa-solid fa-user-tie"></i>Lista Riferimenti</li>
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
         {
-            <li class="@(controllerName == "assegnati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Assegnati")'">Lista Tecnici</li>
+            <li class="@(controllerName == "assegnati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Assegnati")'"><i class="fa fa-solid fa-user-gear"></i>Lista Tecnici</li>
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo >= (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Organizzatore)
         {
-            <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'">Gestione stati</li>
+            <li class="@(controllerName == "stati" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Stati")'"><i class="fa fa-solid fa-list-check"></i>Gestione stati</li>
         }
         @if (AssistenzaTecnica.Models.Utente.UtenteConnesso != null && AssistenzaTecnica.Models.Utente.UtenteConnesso.Profilo == (int)AssistenzaTecnica.Models.Utente.ProfiliUtente.Amministratore)
         {
-            <li class="@(controllerName == "utenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Utenti")'">Gestione utenti</li>
+            <li class="@(controllerName == "utenti" ? "active" : "")" onclick="window.location.href='@Url.Action("Index", "Utenti")'"><i class="fa fa-solid fa-users"></i>Gestione utenti</li>
         }
     </ul>
 </nav>

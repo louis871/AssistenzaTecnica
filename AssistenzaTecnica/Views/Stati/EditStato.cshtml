@@ -18,6 +18,15 @@
             <label>Descrizione</label>
             <input type="text" name="Descrizione" value="@s.Descrizione" />
         </div>
+        <div class="input testo">
+            <label>Profilo minimo</label>
+            <select name="ProfiloMinimo">
+                @foreach (AssistenzaTecnica.Models.Utente.ProfiliUtente p in Enum.GetValues(typeof(AssistenzaTecnica.Models.Utente.ProfiliUtente)))
+                {
+                    <option value="@((int)p)" @((int)p == s.ProfiloMinimo ? "selected" : "")>@p.ToString()</option>
+                }
+            </select>
+        </div>
         <div class="input">
             <input type="submit" name="salva-stato" value="Salva le modifiche" />
         </div>

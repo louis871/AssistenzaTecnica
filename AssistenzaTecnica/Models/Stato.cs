@@ -13,6 +13,7 @@ namespace AssistenzaTecnica.Models
 
         public int Id { get; set; }
         public string Descrizione { get; set; }
+        public int ProfiloMinimo { get; set; }
 
         public static Dictionary<int, Stato> getAllStati()
         {

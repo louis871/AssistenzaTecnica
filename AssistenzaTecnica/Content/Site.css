@@ -52,16 +52,22 @@ p {
                 font-size: 17px;
                 color: white;
                 cursor: pointer;
+                padding-left: 10px;
             }
 
                 .sx-container nav ul li.active, .sx-container nav ul li:hover {
                     background-color: var(--sx-menu-hover-color);
                 }
 
-.dx-container {
-    width: calc(100% - var(--sx-container-width));
-    padding-left: var(--sx-container-width);
-}
+                .sx-container nav ul li .fa {
+                    color: #9b5af1;
+                    margin-right: 8px;
+                }
+
+                .dx-container {
+                    width: calc(100% - var(--sx-container-width));
+                    padding-left: var(--sx-container-width);
+                }
 
     .dx-container .header {
         line-height: var(--header-height);

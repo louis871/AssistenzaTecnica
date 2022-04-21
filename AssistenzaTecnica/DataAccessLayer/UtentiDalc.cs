@@ -106,8 +106,8 @@ namespace AssistenzaTecnica.DataAccessLayer
             string connectionString = ConfigurationManager.ConnectionStrings["connStr"].ConnectionString;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                SqlCommand comm = new SqlCommand("SELECT id, nome, profilo FROM utenti WHERE username = @username AND password = @password", conn);
-                comm.Parameters.AddWithValue("@username", username);
+                SqlCommand comm = new SqlCommand("SELECT id, nome, profilo FROM utenti WHERE LOWER(username) = @username AND password = @password", conn);
+                comm.Parameters.AddWithValue("@username", username.ToLower());
                 comm.Parameters.AddWithValue("@password", password);
                 conn.Open();
                 SqlDataReader reader = comm.ExecuteReader();

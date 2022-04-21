@@ -10,6 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Descrizione</th>
+                <th>Profilo minimo</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -20,6 +21,7 @@
                 <tr>
                     <td>@s.Id</td>
                     <td>@s.Descrizione</td>
+                    <td>@Enum.GetName(typeof(AssistenzaTecnica.Models.Utente.ProfiliUtente), s.ProfiloMinimo)</td>
                     <td align="center" class="detail" title="Visualizza" onclick="window.location.href = '@Url.Action("EditStato", new { idStato = s.Id })'"><i class="fa fa-solid fa-magnifying-glass"></i></td>
                     <td align="center" class="detail" title="Elimina" onclick="eliminaStato(@s.Id, '@Url.Action("EliminaStato", new { idStato = s.Id })')"><i class="fa fa-regular fa-trash-can"></i></td>
                 </tr>

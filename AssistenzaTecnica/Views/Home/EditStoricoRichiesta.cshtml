@@ -1,8 +1,12 @@
-﻿@{
-    AssistenzaTecnica.Models.Richiesta.StatoRichiesta sr = Model;
+﻿@using AssistenzaTecnica.Models;
+
+@{
+    Richiesta.StatoRichiesta sr = Model;
+    Utente utenteConnesso = Utente.UtenteConnesso;
     if (sr.Id == 0)
     {
         ViewBag.Title = "Dettagli del nuovo stato relativo alla richiesta #" + sr.IdRichiesta;
+        sr.DataAggiunta = DateTime.Now;
     }
     else
     {
@@ -18,32 +22,55 @@
         <div class="input testo">
             <label>Stato</label>
             <select name="IdStato">
-                @foreach (AssistenzaTecnica.Models.Stato s in ViewBag.AllStati.Values)
+                @foreach (Stato s in ViewBag.AllStati.Values)
                 {
-                    <option value="@s.Id" @(s.Id == sr.Stato.Id ? "selected" : "")>@s.Descrizione</option>
+                    if (s.ProfiloMinimo <= utenteConnesso.Profilo)
+                    {
+                        <option value="@s.Id" @(s.Id == sr.Stato.Id ? "selected" : "")>@s.Descrizione</option>
+                    }
                 }
             </select>
         </div>
         <div class="input testo">
             <label>Utente</label>
             <select name="IdUtente">
-                @foreach (AssistenzaTecnica.Models.Utente u in ViewBag.AllUtenti.Values)
+                @if (utenteConnesso.Profilo == (int)Utente.ProfiliUtente.Amministratore)
                 {
-                    <option value="@u.Id" @(u.Id == sr.Utente.Id ? "selected" : "")>@u.Nome</option>
+                    foreach (Utente u in ViewBag.AllUtenti.Values)
+                    {
+                        <option value="@u.Id" @(u.Id == sr.Utente.Id ? "selected" : "")>@u.Nome</option>
+                    }
+                }
+                else
+                {
+                    <option value="@utenteConnesso.Id" selected>@utenteConnesso.Nome</option>
                 }
             </select>
         </div>
         <div class="input testo">
-            <label>Data della richiesta</label>
-            <input type="datetime" name="DataAggiunta" value="@sr.DataAggiunta" />
+            <label>Data inserimento stato</label>
+            <input type="datetime" name="DataAggiunta" value="@sr.DataAggiunta" @(utenteConnesso.Profilo <= (int)Utente.ProfiliUtente.TecnicoOperativo ? "readonly" : "") />
         </div>
         <div class="input testo">
             <label>Assegnato a</label>
-            <select name="IdAssegnazione">
-                <option value="" @(sr.IdAssegnazione.HasValue ? "" : "selected")></option>
-                @foreach (AssistenzaTecnica.Models.Assegnato a in ViewBag.AllAssegnati.Values)
+            <select name="IdAssegnazione" @(utenteConnesso.Profilo == (int)Utente.ProfiliUtente.TecnicoPrimoLivello ? "disabled" : "")>
+                @if (utenteConnesso.Profilo == (int)Utente.ProfiliUtente.TecnicoOperativo)
                 {
-                    <option value="@a.Id" @(a.Id == sr.IdAssegnazione ? "selected" : "")>@a.Nome</option>
+                    foreach (Assegnato a in ViewBag.AllAssegnati.Values)
+                    {
+                        if (a.IdUtente == utenteConnesso.Id)
+                        {
+                            <option value="@a.Id" selected>@a.Nome</option>
+                        }
+                    }
+                }
+                else
+                {
+                    <option value="" @(sr.IdAssegnazione.HasValue ? "" : "selected")></option>
+                    foreach (Assegnato a in ViewBag.AllAssegnati.Values)
+                    {
+                        <option value="@a.Id" @(a.Id == sr.IdAssegnazione ? "selected" : "")>@a.Nome</option>
+                    }
                 }
             </select>
         </div>
